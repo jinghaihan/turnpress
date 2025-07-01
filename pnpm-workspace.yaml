@@ -1,0 +1,36 @@
+packages: []
+catalogs:
+  build:
+    unbuild: ^3.5.0
+  cli:
+    bumpp: ^10.2.0
+    czg: ^1.11.1
+    pncat: ^0.2.4
+    taze: ^19.1.0
+  dev:
+    '@octohash/tsconfig': ^0.1.0
+    typescript: ^5.8.3
+  lint:
+    '@antfu/eslint-config': ^4.16.1
+    eslint: ^9.30.0
+    lint-staged: ^16.1.2
+    simple-git-hooks: ^2.13.0
+  markdown:
+    turndown: ^7.2.0
+  node:
+    '@clack/prompts': ^0.11.0
+    ansis: ^4.1.0
+    cac: ^6.7.14
+    cheerio: ^1.1.0
+    execa: ^9.6.0
+    fs-extra: ^11.3.0
+    rimraf: ^6.0.1
+    unconfig: ^7.3.2
+  script:
+    tsx: ^4.20.3
+  test:
+    vitest: ^3.2.4
+  types:
+    '@types/fs-extra': ^11.0.4
+    '@types/node': ^24.0.8
+    '@types/turndown': ^5.0.5

@@ -1,0 +1,90 @@
+{
+  "name": "turnpress",
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.10.0",
+  "description": "Docx to VitePress converter, powered by pandoc and turndown.",
+  "author": "jinghaihan",
+  "license": "MIT",
+  "homepage": "https://github.com/jinghaihan/turnpress#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinghaihan/turnpress.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jinghaihan/turnpress/issues"
+  },
+  "keywords": [
+    "docx",
+    "vitepress",
+    "converter",
+    "pandoc",
+    "turndown",
+    "markdown"
+  ],
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./cli": "./dist/cli.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "turnpress": "./bin/turnpress.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsx ./src/cli.ts",
+    "build": "unbuild",
+    "typecheck": "tsc",
+    "test": "vitest",
+    "lint": "eslint",
+    "commit": "czg",
+    "deps": "taze major -I",
+    "release": "pnpm build && bumpp && pnpm publish --no-git-checks",
+    "catalog": "pncat",
+    "prepare": "npx simple-git-hooks",
+    "bootstrap": "pnpm install",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "dependencies": {
+    "@clack/prompts": "catalog:node",
+    "ansis": "catalog:node",
+    "cac": "catalog:node",
+    "cheerio": "catalog:node",
+    "execa": "catalog:node",
+    "fs-extra": "catalog:node",
+    "rimraf": "catalog:node",
+    "turndown": "catalog:markdown",
+    "unconfig": "catalog:node"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:lint",
+    "@octohash/tsconfig": "catalog:dev",
+    "@types/fs-extra": "catalog:types",
+    "@types/node": "catalog:types",
+    "@types/turndown": "catalog:types",
+    "bumpp": "catalog:cli",
+    "czg": "catalog:cli",
+    "eslint": "catalog:lint",
+    "lint-staged": "catalog:lint",
+    "pncat": "catalog:cli",
+    "simple-git-hooks": "catalog:lint",
+    "taze": "catalog:cli",
+    "tsx": "catalog:script",
+    "turnpress": "workspace:*",
+    "typescript": "catalog:dev",
+    "unbuild": "catalog:build",
+    "vitest": "catalog:test"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
