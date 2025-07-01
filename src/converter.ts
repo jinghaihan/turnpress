@@ -72,15 +72,7 @@ export async function convertHtmlToMarkdown(options: ConvertOptions) {
   const $ = cheerio.load(html)
   $('title').remove()
   $('style').remove()
-  $('[style]').removeAttr('style')
 
-  const turdownService = initTurndownService(outputDir)
-  const md = turdownService.turndown($.html())
-
-  await writeFile(path.join(cwd, outputDir, 'index.md'), md)
-}
-
-function initTurndownService(outputDir: string) {
   const turndownService = new TurndownService({
     headingStyle: 'atx',
   })
@@ -93,13 +85,17 @@ function initTurndownService(outputDir: string) {
   })
 
   turndownService.addRule('image', {
-    filter: 'img',
+    filter: ['img'],
     replacement(content, node) {
-      const src = node.getAttribute('src')
-      const alt = node.getAttribute('alt') ?? ''
-      return `![${alt}](${src.replace(`./${outputDir}/`, './')}) `
+      const src = node.getAttribute('src')?.replace?.(`./${outputDir}/`, './') || ''
+      const alt = node.getAttribute('alt') || ''
+      const style = node.getAttribute('style') || ''
+
+      return `<img src="${src}" alt="${alt}" style="${style};display:inline-block;">`
     },
   })
 
-  return turndownService
+  const content = turndownService.turndown($.html())
+
+  await writeFile(path.join(cwd, outputDir, 'index.md'), content)
 }

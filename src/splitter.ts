@@ -57,8 +57,9 @@ export async function splitMarkdown(options: ConvertOptions) {
 async function generateArticle(headings: HeadingNode[], options: ConvertOptions) {
   const { cwd = process.cwd(), outputDir = OUTPUT_DIR } = options
 
-  const write = async (fileName: string, content: string) => {
-    await writeFile(path.join(cwd, outputDir, fileName), content)
+  const write = async (title: string, content: string) => {
+    const _content = `# ${title}\n\n${content}`
+    await writeFile(path.join(cwd, outputDir, `${title}.md`), _content)
   }
 
   const traverse = (node: HeadingNode): string => {
@@ -69,7 +70,7 @@ async function generateArticle(headings: HeadingNode[], options: ConvertOptions)
 
   for (const item of headings) {
     if (!item.children.length) {
-      await write(`${item.title}.md`, item.content)
+      await write(item.title, item.content)
       continue
     }
 
@@ -77,7 +78,7 @@ async function generateArticle(headings: HeadingNode[], options: ConvertOptions)
       const content = child.children.length
         ? traverse(child).trim()
         : child.content
-      await write(`${child.title}.md`, content)
+      await write(child.title, content)
     }
   }
 }
