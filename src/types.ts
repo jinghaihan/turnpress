@@ -2,7 +2,7 @@ import type { MODE_CHOICES } from './constants'
 
 export type RangeMode = typeof MODE_CHOICES[number]
 
-export type ResolvedOptions = Required<CommandOptions>
+export type Options = Required<CommandOptions>
 
 export interface CommonOptions {
   mode?: RangeMode

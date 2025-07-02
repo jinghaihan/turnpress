@@ -1,9 +1,9 @@
-import type { HeadingNode, ResolvedOptions } from './types'
+import type { HeadingNode, Options } from './types'
 import { writeFile } from 'node:fs/promises'
-import path from 'node:path'
+import { resolve } from 'pathe'
 
-export async function generateSidebar(headings: HeadingNode[], options: ResolvedOptions) {
-  const { cwd, workspace } = options
+export async function generateSidebar(headings: HeadingNode[], options: Options) {
+  const { workspace } = options
 
   const sidebar = headings.map((item) => {
     const items = item.children.map((child) => {
@@ -20,5 +20,5 @@ export async function generateSidebar(headings: HeadingNode[], options: Resolved
     }
   })
 
-  await writeFile(path.join(cwd, workspace, 'sidebar.json'), JSON.stringify(sidebar, null, 2))
+  await writeFile(resolve(workspace, 'sidebar.json'), JSON.stringify(sidebar, null, 2))
 }

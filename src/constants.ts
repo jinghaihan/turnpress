@@ -10,3 +10,7 @@ export const DEFAULT_OPTIONS: CommandOptions = {
   pandoc: 'pandoc',
   workspace: './turnpress',
 }
+
+export const TEMP_MD = 'temp.md'
+export const TEMP_HTML = 'temp.html'
+export const TEMP_FILES = [TEMP_MD, TEMP_HTML]

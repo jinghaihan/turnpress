@@ -1,12 +1,10 @@
-import type { ResolvedOptions } from './types'
-import path from 'node:path'
+import type { Options } from './types'
+import { resolve } from 'pathe'
 import { rimraf } from 'rimraf'
+import { TEMP_FILES } from './constants'
 
-export async function clean(options: ResolvedOptions) {
-  const { cwd, workspace } = options
+export async function clean(options: Options) {
+  const { workspace } = options
 
-  await Promise.all([
-    rimraf(path.join(cwd, workspace, 'index.md')),
-    rimraf(path.join(cwd, workspace, 'index.html')),
-  ])
+  await rimraf(TEMP_FILES.map(f => resolve(workspace, f)))
 }

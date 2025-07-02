@@ -1,10 +1,11 @@
-import type { CommandOptions, ResolvedOptions } from './types'
+import type { CommandOptions, Options } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
+import { isAbsolute, resolve } from 'pathe'
 import { createConfigLoader } from 'unconfig'
 import { DEFAULT_OPTIONS } from './constants'
 
-export async function resolveConfig(options: Partial<CommandOptions>): Promise<ResolvedOptions> {
+export async function resolveConfig(options: Partial<CommandOptions>): Promise<Options> {
   const loader = createConfigLoader<CommandOptions>({
     sources: [
       {
@@ -24,7 +25,16 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<R
   })
 
   const config = await loader.load()
-  const merged = { ...DEFAULT_OPTIONS, ...options, ...config.config }
+
+  const merged: CommandOptions = {
+    ...DEFAULT_OPTIONS,
+    ...options,
+    ...config.config,
+  }
+
+  merged.cwd = merged.cwd || process.cwd()
+  if (!isAbsolute(merged.workspace!))
+    merged.workspace = resolve(merged.cwd!, merged.workspace!)
 
   if (!merged.docx) {
     const result = await p.text({
@@ -37,5 +47,5 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<R
     merged.docx = result
   }
 
-  return merged as ResolvedOptions
+  return merged as Options
 }

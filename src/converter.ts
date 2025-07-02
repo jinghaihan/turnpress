@@ -1,16 +1,17 @@
-import type { ResolvedOptions } from './types'
+import type { Options } from './types'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import path from 'node:path'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import * as cheerio from 'cheerio'
 import { execa } from 'execa'
 import { exists } from 'fs-extra'
+import { resolve } from 'pathe'
 import TurndownService from 'turndown'
+import { TEMP_HTML, TEMP_MD } from './constants'
 
-export async function convertDocxToHtml(options: ResolvedOptions) {
-  const { cwd, workspace, pandoc, docx } = options
+export async function convertDocxToHtml(options: Options) {
+  const { workspace, pandoc, docx } = options
 
   if (!pandoc) {
     p.outro(c.red('pandoc not found, aborting'))
@@ -22,16 +23,16 @@ export async function convertDocxToHtml(options: ResolvedOptions) {
     process.exit(1)
   }
 
-  if (!(await exists(path.join(cwd, workspace))))
-    await mkdir(path.join(cwd, workspace))
+  if (!(await exists(resolve(workspace))))
+    await mkdir(resolve(workspace))
 
   await execa(
     pandoc,
     [
       docx,
       '-o',
-      `./${workspace}/index.md`,
-      `--extract-media=./${workspace}/images`,
+      resolve(workspace, TEMP_MD),
+      `--extract-media=${resolve(workspace, 'images')}`,
       '-t',
       'markdown_strict',
       '--wrap=preserve',
@@ -39,50 +40,44 @@ export async function convertDocxToHtml(options: ResolvedOptions) {
     {
       shell: true,
       stdio: 'inherit',
-      cwd,
     },
   )
 
   await execa(
     pandoc,
     [
-      `./${workspace}/index.md`,
+      resolve(workspace, TEMP_MD),
       '-s',
       '-o',
-      `./${workspace}/index.html`,
+      resolve(workspace, TEMP_HTML),
     ],
     {
       shell: true,
       stdio: 'inherit',
-      cwd,
     },
   )
 }
 
-export async function convertHtmlToMarkdown(options: ResolvedOptions) {
-  const { cwd, workspace } = options
+export async function convertHtmlToMarkdown(options: Options) {
+  const { workspace } = options
 
-  const html = await readFile(path.join(cwd, workspace, 'index.html'), 'utf-8')
-
+  const html = await readFile(resolve(workspace, TEMP_HTML), 'utf-8')
   const $ = cheerio.load(html)
-  $('title').remove()
-  $('style').remove()
+  $('title, style').remove()
 
   const turndownService = new TurndownService({
     headingStyle: 'atx',
   })
-
   turndownService.addRule('strong', {
     filter: ['strong', 'b'],
     replacement(content) {
       return `**${content}** `
     },
   })
-
   turndownService.addRule('image', {
     filter: ['img'],
     replacement(_, node) {
-      const src = node.getAttribute('src')?.replace?.(`./${workspace}/`, './') || ''
+      const src = node.getAttribute('src')?.replace?.(`${workspace}/`, './') || ''
       const alt = node.getAttribute('alt') || ''
       const style = node.getAttribute('style') || ''
 
@@ -90,7 +85,6 @@ export async function convertHtmlToMarkdown(options: ResolvedOptions) {
     },
   })
 
-  const content = turndownService.turndown($.html())
-
-  await writeFile(path.join(cwd, workspace, 'index.md'), content)
+  const markdown = turndownService.turndown($.html())
+  await writeFile(resolve(workspace, TEMP_MD), markdown)
 }

@@ -1,11 +1,12 @@
-import type { HeadingNode, ResolvedOptions } from './types'
+import type { HeadingNode, Options } from './types'
 import { readFile, writeFile } from 'node:fs/promises'
-import path from 'node:path'
+import { resolve } from 'pathe'
+import { TEMP_MD } from './constants'
 
-export async function splitMarkdown(options: ResolvedOptions) {
-  const { cwd, workspace } = options
+export async function splitMarkdown(options: Options) {
+  const { workspace } = options
 
-  const mdText = await readFile(path.join(cwd, workspace, 'index.md'), 'utf-8')
+  const mdText = await readFile(resolve(workspace, TEMP_MD), 'utf-8')
 
   const lines = mdText.split('\n')
   const headings: HeadingNode[] = []
@@ -52,11 +53,11 @@ export async function splitMarkdown(options: ResolvedOptions) {
   return nested
 }
 
-async function generateArticle(headings: HeadingNode[], options: ResolvedOptions) {
-  const { cwd, workspace } = options
+async function generateArticle(headings: HeadingNode[], options: Options) {
+  const { workspace } = options
 
   const write = async (title: string, content: string) => {
-    await writeFile(path.join(cwd, workspace, `${title}.md`), `# ${title}\n\n${content}`)
+    await writeFile(resolve(workspace, `${title}.md`), `# ${title}\n\n${content}`)
   }
 
   const traverse = (node: HeadingNode): string => {

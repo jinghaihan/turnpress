@@ -1,4 +1,6 @@
-packages: []
+packages:
+  - .
+  - template
 catalogs:
   build:
     unbuild: ^3.5.0
@@ -24,6 +26,7 @@ catalogs:
     cheerio: ^1.1.0
     execa: ^9.6.0
     fs-extra: ^11.3.0
+    pathe: ^2.0.3
     rimraf: ^6.0.1
     unconfig: ^7.3.2
   script:

@@ -65,6 +65,9 @@ catalogs:
     fs-extra:
       specifier: ^11.3.0
       version: 11.3.0
+    pathe:
+      specifier: ^2.0.3
+      version: 2.0.3
     rimraf:
       specifier: ^6.0.1
       version: 6.0.1
@@ -112,6 +115,9 @@ importers:
       fs-extra:
         specifier: catalog:node
         version: 11.3.0
+      pathe:
+        specifier: catalog:node
+        version: 2.0.3
       rimraf:
         specifier: catalog:node
         version: 6.0.1

@@ -58,6 +58,7 @@
     "cheerio": "catalog:node",
     "execa": "catalog:node",
     "fs-extra": "catalog:node",
+    "pathe": "catalog:node",
     "rimraf": "catalog:node",
     "turndown": "catalog:markdown",
     "unconfig": "catalog:node"
