@@ -1,5 +1,5 @@
 import type { CAC } from 'cac'
-import type { ConvertOptions } from './types'
+import type { CommandOptions, RangeMode } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
@@ -7,7 +7,7 @@ import { cac } from 'cac'
 import { version } from '../package.json'
 import { clean } from './cleaner'
 import { resolveConfig } from './config'
-import { HOMEBREW_PANDOC_PATH } from './constants'
+import { MODE_CHOICES } from './constants'
 import { convertDocxToHtml, convertHtmlToMarkdown } from './converter'
 import { generateSidebar } from './sidebar'
 import { splitMarkdown } from './splitter'
@@ -16,60 +16,22 @@ try {
   const cli: CAC = cac('turnpress')
 
   cli
-    .command('', 'Convert DOCX document to Vitepress-ready Markdown')
-    .option('--docx <path>', 'Path to source DOCX file')
-    .option('--pandoc <path>', 'Specify path to Pandoc executable')
-    .option('--outputDir, -o <path>', 'Directory for generated files')
-    .action(async (options: Partial<ConvertOptions>) => {
+    .command('[mode]', 'Convert DOCX document to Vitepress-ready Markdown')
+    .option('--docx, -d <path>', 'Path to source DOCX file')
+    .option('--pandoc, -p <path>', 'Specify path to Pandoc executable')
+    .option('--workspace, -w <path>', 'Directory for generated files')
+    .action(async (mode: RangeMode, options: Partial<CommandOptions>) => {
+      if (mode) {
+        if (!MODE_CHOICES.includes(mode)) {
+          console.error(`Invalid mode: ${mode}. Please use one of the following: ${MODE_CHOICES.join('|')}`)
+          process.exit(1)
+        }
+        options.mode = mode
+      }
+
       p.intro(`${c.yellow`turnpress `}${c.dim`v${version}`}`)
 
       const resolved = await resolveConfig(options)
-
-      if (!resolved.pandoc) {
-        const result: string | symbol = await p.select({
-          message: 'Pandoc not found, please select one',
-          options: [
-            {
-              label: 'homebrew',
-              value: HOMEBREW_PANDOC_PATH,
-            },
-            {
-              label: '<input>',
-              value: '*',
-            },
-          ],
-        })
-
-        if (!result || typeof result === 'symbol') {
-          p.outro(c.red('Invalid pandoc path'))
-          process.exit(1)
-        }
-
-        if (result === '*') {
-          const result = await p.text({
-            message: `Enter pandoc path, you can find it by 'where pandoc'`,
-          })
-          if (!result || typeof result !== 'string') {
-            p.outro()
-            process.exit(1)
-          }
-          resolved.pandoc = result
-        }
-        else {
-          resolved.pandoc = result
-        }
-      }
-
-      if (!resolved.docx) {
-        const result = await p.text({
-          message: `Enter the path to your DOCX file`,
-        })
-        if (!result || typeof result !== 'string') {
-          p.outro()
-          process.exit(1)
-        }
-        resolved.docx = result
-      }
 
       p.log.step('Converting DOCX → HTML')
       await convertDocxToHtml(resolved)

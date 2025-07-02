@@ -1,13 +1,11 @@
-import type { ConvertOptions, HeadingNode } from './types'
+import type { HeadingNode, ResolvedOptions } from './types'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import process from 'node:process'
-import { OUTPUT_DIR } from './constants'
 
-export async function splitMarkdown(options: ConvertOptions) {
-  const { cwd = process.cwd(), outputDir = OUTPUT_DIR } = options
+export async function splitMarkdown(options: ResolvedOptions) {
+  const { cwd, workspace } = options
 
-  const mdText = await readFile(path.join(cwd, outputDir, 'index.md'), 'utf-8')
+  const mdText = await readFile(path.join(cwd, workspace, 'index.md'), 'utf-8')
 
   const lines = mdText.split('\n')
   const headings: HeadingNode[] = []
@@ -48,18 +46,17 @@ export async function splitMarkdown(options: ConvertOptions) {
     headings.push(currentHeading)
   }
 
-  const resolved = nested(headings)
-  await generateArticle(resolved, options)
+  const nested = generateNested(headings)
+  await generateArticle(nested, options)
 
-  return resolved
+  return nested
 }
 
-async function generateArticle(headings: HeadingNode[], options: ConvertOptions) {
-  const { cwd = process.cwd(), outputDir = OUTPUT_DIR } = options
+async function generateArticle(headings: HeadingNode[], options: ResolvedOptions) {
+  const { cwd, workspace } = options
 
   const write = async (title: string, content: string) => {
-    const _content = `# ${title}\n\n${content}`
-    await writeFile(path.join(cwd, outputDir, `${title}.md`), _content)
+    await writeFile(path.join(cwd, workspace, `${title}.md`), `# ${title}\n\n${content}`)
   }
 
   const traverse = (node: HeadingNode): string => {
@@ -83,7 +80,7 @@ async function generateArticle(headings: HeadingNode[], options: ConvertOptions)
   }
 }
 
-function nested(flatHeadings: HeadingNode[]): HeadingNode[] {
+function generateNested(flatHeadings: HeadingNode[]): HeadingNode[] {
   const root: HeadingNode[] = []
   const stack: HeadingNode[] = []
 

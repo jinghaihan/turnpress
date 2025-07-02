@@ -1,25 +1,34 @@
-export interface ConvertOptions {
+import type { MODE_CHOICES } from './constants'
+
+export type RangeMode = typeof MODE_CHOICES[number]
+
+export type ResolvedOptions = Required<CommandOptions>
+
+export interface CommonOptions {
+  mode?: RangeMode
   cwd?: string
   /**
    * whether to clean up the output directory
    * @default true
    */
   clean?: boolean
-  /**
-   * Path to source DOCX file
-   * @default './workspace/index.docx'
-   */
-  docx?: string
+}
+
+export interface CommandOptions extends CommonOptions {
   /**
    * Specify path to Pandoc executable
-   * @default '/opt/homebrew/bin/pandoc'
+   * @default auto-detect
    */
   pandoc?: string
   /**
-   * Directory for generated files
-   * @default './workspace'
+   * Path to source DOCX file
    */
-  outputDir?: string
+  docx?: string
+  /**
+   * Directory for generated files
+   * @default './turnpress'
+   */
+  workspace?: string
 }
 
 export interface HeadingNode {

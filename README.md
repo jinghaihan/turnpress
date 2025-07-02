@@ -10,8 +10,10 @@ TurnPress is a CLI tool that converts .docx files into Vitepress-compatible Mark
 ## Installation
 
 ```sh
-pnpm add -D pncat
-pnpm turnpress --docx ./test.docx --outputDir ./workspace
+pnpm add -D turnpress
+pnpm turnpress --docx ./test.docx
+# or
+pnpx turnpress --docx ./test.docx
 ```
 
 ## Configuration
@@ -30,9 +32,9 @@ You can also use environment variables to customize behavior.
 
 | Option                  | Description                                                  |
 | ----------------------- | ------------------------------------------------------------ |
-| `--docx <path>`         | **Input file**: Path to the `.docx` file (required).         |
-| `--pandoc <path>`       | **Pandoc path**: Custom path to Pandoc executable. |
-| `--outputDir, -o <dir>` | **Output directory**: Where generated are saved (default: `./workspace`). |
+| `--docx, -d <path>`         | **Input file**: Path to the `.docx` file (required).         |
+| `--pandoc, -p <path>`       | **Pandoc path**: Custom path to Pandoc executable. |
+| `--workspace, -w <dir>` | **Work directory**: Where generated are saved (default: `./turnpress`). |
 
 ## How it Works
 

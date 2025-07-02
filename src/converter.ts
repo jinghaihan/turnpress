@@ -1,4 +1,4 @@
-import type { ConvertOptions } from './types'
+import type { ResolvedOptions } from './types'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
@@ -8,15 +8,9 @@ import * as cheerio from 'cheerio'
 import { execa } from 'execa'
 import { exists } from 'fs-extra'
 import TurndownService from 'turndown'
-import { OUTPUT_DIR } from './constants'
 
-export async function convertDocxToHtml(options: ConvertOptions) {
-  const {
-    cwd = process.cwd(),
-    pandoc,
-    docx,
-    outputDir = OUTPUT_DIR,
-  } = options
+export async function convertDocxToHtml(options: ResolvedOptions) {
+  const { cwd, workspace, pandoc, docx } = options
 
   if (!pandoc) {
     p.outro(c.red('pandoc not found, aborting'))
@@ -28,22 +22,22 @@ export async function convertDocxToHtml(options: ConvertOptions) {
     process.exit(1)
   }
 
-  if (!(await exists(path.join(cwd, outputDir)))) {
-    await mkdir(path.join(cwd, outputDir))
-  }
+  if (!(await exists(path.join(cwd, workspace))))
+    await mkdir(path.join(cwd, workspace))
 
   await execa(
     pandoc,
     [
       docx,
       '-o',
-      `./${outputDir}/index.md`,
-      `--extract-media=./${outputDir}/images`,
+      `./${workspace}/index.md`,
+      `--extract-media=./${workspace}/images`,
       '-t',
       'markdown_strict',
       '--wrap=preserve',
     ],
     {
+      shell: true,
       stdio: 'inherit',
       cwd,
     },
@@ -52,22 +46,23 @@ export async function convertDocxToHtml(options: ConvertOptions) {
   await execa(
     pandoc,
     [
-      `./${outputDir}/index.md`,
+      `./${workspace}/index.md`,
       '-s',
       '-o',
-      `./${outputDir}/index.html`,
+      `./${workspace}/index.html`,
     ],
     {
+      shell: true,
       stdio: 'inherit',
       cwd,
     },
   )
 }
 
-export async function convertHtmlToMarkdown(options: ConvertOptions) {
-  const { cwd = process.cwd(), outputDir = OUTPUT_DIR } = options
+export async function convertHtmlToMarkdown(options: ResolvedOptions) {
+  const { cwd, workspace } = options
 
-  const html = await readFile(path.join(cwd, outputDir, 'index.html'), 'utf-8')
+  const html = await readFile(path.join(cwd, workspace, 'index.html'), 'utf-8')
 
   const $ = cheerio.load(html)
   $('title').remove()
@@ -86,8 +81,8 @@ export async function convertHtmlToMarkdown(options: ConvertOptions) {
 
   turndownService.addRule('image', {
     filter: ['img'],
-    replacement(content, node) {
-      const src = node.getAttribute('src')?.replace?.(`./${outputDir}/`, './') || ''
+    replacement(_, node) {
+      const src = node.getAttribute('src')?.replace?.(`./${workspace}/`, './') || ''
       const alt = node.getAttribute('alt') || ''
       const style = node.getAttribute('style') || ''
 
@@ -97,5 +92,5 @@ export async function convertHtmlToMarkdown(options: ConvertOptions) {
 
   const content = turndownService.turndown($.html())
 
-  await writeFile(path.join(cwd, outputDir, 'index.md'), content)
+  await writeFile(path.join(cwd, workspace, 'index.md'), content)
 }

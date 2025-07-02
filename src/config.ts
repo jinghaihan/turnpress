@@ -1,10 +1,11 @@
-import type { ConvertOptions } from './types'
+import type { CommandOptions, ResolvedOptions } from './types'
 import process from 'node:process'
+import * as p from '@clack/prompts'
 import { createConfigLoader } from 'unconfig'
-import { DEFAULT_CONVERT_OPTIONS } from './constants'
+import { DEFAULT_OPTIONS } from './constants'
 
-export async function resolveConfig(options: Partial<ConvertOptions>): Promise<ConvertOptions> {
-  const loader = createConfigLoader<ConvertOptions>({
+export async function resolveConfig(options: Partial<CommandOptions>): Promise<ResolvedOptions> {
+  const loader = createConfigLoader<CommandOptions>({
     sources: [
       {
         files: [
@@ -23,10 +24,18 @@ export async function resolveConfig(options: Partial<ConvertOptions>): Promise<C
   })
 
   const config = await loader.load()
+  const merged = { ...DEFAULT_OPTIONS, ...options, ...config.config }
 
-  return {
-    ...DEFAULT_CONVERT_OPTIONS,
-    ...options,
-    ...config.config,
+  if (!merged.docx) {
+    const result = await p.text({
+      message: `Enter the path to your DOCX file`,
+    })
+    if (!result || typeof result !== 'string') {
+      p.outro()
+      process.exit(1)
+    }
+    merged.docx = result
   }
+
+  return merged as ResolvedOptions
 }

@@ -5,7 +5,7 @@ catalogs:
   cli:
     bumpp: ^10.2.0
     czg: ^1.11.1
-    pncat: ^0.2.4
+    pncat: ^0.2.5
     taze: ^19.1.0
   dev:
     '@octohash/tsconfig': ^0.1.0

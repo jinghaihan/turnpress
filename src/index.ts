@@ -1,5 +1,5 @@
-import type { ConvertOptions } from './types'
+import type { CommandOptions } from './types'
 
-export function defineConfig(config: Partial<ConvertOptions>) {
+export function defineConfig(config: Partial<CommandOptions>) {
   return config
 }

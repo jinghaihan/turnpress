@@ -17,8 +17,8 @@ catalogs:
       specifier: ^1.11.1
       version: 1.11.1
     pncat:
-      specifier: ^0.2.4
-      version: 0.2.4
+      specifier: ^0.2.5
+      version: 0.2.5
     taze:
       specifier: ^19.1.0
       version: 19.1.0
@@ -151,7 +151,7 @@ importers:
         version: 16.1.2
       pncat:
         specifier: catalog:cli
-        version: 0.2.4(@antfu/nip@0.1.0)
+        version: 0.2.5(@antfu/nip@0.1.0)
       simple-git-hooks:
         specifier: catalog:lint
         version: 2.13.0
@@ -2170,8 +2170,8 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  pncat@0.2.4:
-    resolution: {integrity: sha512-78UUw2uPyDGHqwbIIAnxKdRe5kcTwKBpp4LZsr4Q0G0NhKUXY0pHLutCyrZAd8CljA4Zs4d1CsaOV1HxfkTmhQ==}
+  pncat@0.2.5:
+    resolution: {integrity: sha512-7ZMchMPOM55j2xaj/CKikjatBf7+Cow3fBEzwJ7kr8rUlrfLFSNneAsxGxOqxyFFjtucynCI2C1WF9E6cApL7w==}
     hasBin: true
     peerDependencies:
       '@antfu/nip': ^0.1.0
@@ -5068,7 +5068,7 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  pncat@0.2.4(@antfu/nip@0.1.0):
+  pncat@0.2.5(@antfu/nip@0.1.0):
     dependencies:
       '@antfu/nip': 0.1.0
       '@clack/prompts': 0.11.0

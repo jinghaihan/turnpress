@@ -1,11 +1,9 @@
-import type { ConvertOptions, HeadingNode } from './types'
+import type { HeadingNode, ResolvedOptions } from './types'
 import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import process from 'node:process'
-import { OUTPUT_DIR } from './constants'
 
-export async function generateSidebar(headings: HeadingNode[], options: ConvertOptions) {
-  const { cwd = process.cwd(), outputDir = OUTPUT_DIR } = options
+export async function generateSidebar(headings: HeadingNode[], options: ResolvedOptions) {
+  const { cwd, workspace } = options
 
   const sidebar = headings.map((item) => {
     const items = item.children.map((child) => {
@@ -22,5 +20,5 @@ export async function generateSidebar(headings: HeadingNode[], options: ConvertO
     }
   })
 
-  await writeFile(path.join(cwd, outputDir, 'sidebar.json'), JSON.stringify(sidebar, null, 2))
+  await writeFile(path.join(cwd, workspace, 'sidebar.json'), JSON.stringify(sidebar, null, 2))
 }
