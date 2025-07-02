@@ -8,7 +8,7 @@ import { execa } from 'execa'
 import { exists } from 'fs-extra'
 import { resolve } from 'pathe'
 import TurndownService from 'turndown'
-import { TEMP_HTML, TEMP_MD } from './constants'
+import { TEMP_HTML, TEMP_MARKDOWN } from './constants'
 
 export async function convertDocxToHtml(options: Options) {
   const { workspace, pandoc, docx } = options
@@ -31,7 +31,7 @@ export async function convertDocxToHtml(options: Options) {
     [
       docx,
       '-o',
-      resolve(workspace, TEMP_MD),
+      resolve(workspace, TEMP_MARKDOWN),
       `--extract-media=${resolve(workspace, 'images')}`,
       '-t',
       'markdown_strict',
@@ -46,7 +46,7 @@ export async function convertDocxToHtml(options: Options) {
   await execa(
     pandoc,
     [
-      resolve(workspace, TEMP_MD),
+      resolve(workspace, TEMP_MARKDOWN),
       '-s',
       '-o',
       resolve(workspace, TEMP_HTML),
@@ -86,5 +86,5 @@ export async function convertHtmlToMarkdown(options: Options) {
   })
 
   const markdown = turndownService.turndown($.html())
-  await writeFile(resolve(workspace, TEMP_MD), markdown)
+  await writeFile(resolve(workspace, TEMP_MARKDOWN), markdown)
 }

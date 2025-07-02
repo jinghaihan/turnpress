@@ -1,3 +1,4 @@
+import type { DefaultTheme } from 'vitepress'
 import type { HeadingNode, Options } from './types'
 import { writeFile } from 'node:fs/promises'
 import { resolve } from 'pathe'
@@ -5,8 +6,8 @@ import { resolve } from 'pathe'
 export async function generateSidebar(headings: HeadingNode[], options: Options) {
   const { workspace } = options
 
-  const sidebar = headings.map((item) => {
-    const items = item.children.map((child) => {
+  const sidebar: DefaultTheme.SidebarItem[] = headings.map((item) => {
+    const items: DefaultTheme.SidebarItem[] = item.children.map((child) => {
       return {
         text: child.title,
         link: child.title,

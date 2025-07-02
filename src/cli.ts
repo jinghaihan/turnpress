@@ -5,10 +5,11 @@ import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
 import { version } from '../package.json'
-import { clean } from './cleaner'
+import { cleanTempFiles } from './cleaner'
 import { resolveConfig } from './config'
 import { MODE_CHOICES } from './constants'
 import { convertDocxToHtml, convertHtmlToMarkdown } from './converter'
+import { create } from './create'
 import { generateSidebar } from './sidebar'
 import { splitMarkdown } from './splitter'
 
@@ -47,10 +48,17 @@ try {
 
       if (resolved.clean) {
         p.log.step('Cleaning temporary files')
-        await clean(resolved)
+        await cleanTempFiles(resolved)
       }
 
-      p.outro('Convert completed')
+      if (resolved.mode === 'convert') {
+        p.outro('Convert completed')
+        process.exit(1)
+      }
+      else {
+        p.log.step('Convert completed')
+        await create(resolved)
+      }
     })
 
   cli.help()

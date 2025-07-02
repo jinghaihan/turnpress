@@ -1,0 +1,9 @@
+/**
+ * Customize default theme styling by overriding CSS variables:
+ * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ */
+
+.outline-link:hover,
+.outline-link.active {
+  color: var(--vp-c-brand-1) !important;
+}

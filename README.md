@@ -7,14 +7,30 @@
 
 TurnPress is a CLI tool that converts .docx files into Vitepress-compatible Markdown, leveraging Pandoc and Turndown to split and structure documents for seamless Vitepress integration.
 
-## Installation
+> [!NOTE]
+> This project requires Pandoc to function properly. Please ensure you have [Pandoc](https://github.com/jgm/pandoc) installed before using it.
 
 ```sh
-pnpm add -D turnpress
-pnpm turnpress --docx ./test.docx
-# or
 pnpx turnpress --docx ./test.docx
 ```
+
+## Features
+
+### Convert
+
+```sh
+pnpx turnpress convert --docx ./test.docx
+```
+
+The convert command (default) processes the specified DOCX file, splitting its content and generating a corresponding sidebar structure based on the document's headings. This is suitable for integrating the output into an existing VitePress project.
+
+### Create
+
+```sh
+pnpx turnpress create --docx ./test.docx
+```
+
+The create command performs the same conversion as convert, then interactively generates a VitePress template through prompts and directly integrates the processed content and images. This is ideal for initializing a new VitePress project.
 
 ## Configuration
 

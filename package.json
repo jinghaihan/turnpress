@@ -35,7 +35,8 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "template"
   ],
   "scripts": {
     "start": "tsx ./src/cli.ts",
@@ -60,6 +61,7 @@
     "fs-extra": "catalog:node",
     "pathe": "catalog:node",
     "rimraf": "catalog:node",
+    "tinyglobby": "catalog:node",
     "turndown": "catalog:markdown",
     "unconfig": "catalog:node"
   },
@@ -80,6 +82,7 @@
     "turnpress": "workspace:*",
     "typescript": "catalog:dev",
     "unbuild": "catalog:build",
+    "vitepress": "catalog:build",
     "vitest": "catalog:test"
   },
   "simple-git-hooks": {

@@ -1,12 +1,12 @@
 import type { HeadingNode, Options } from './types'
 import { readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'pathe'
-import { TEMP_MD } from './constants'
+import { TEMP_MARKDOWN } from './constants'
 
 export async function splitMarkdown(options: Options) {
   const { workspace } = options
 
-  const mdText = await readFile(resolve(workspace, TEMP_MD), 'utf-8')
+  const mdText = await readFile(resolve(workspace, TEMP_MARKDOWN), 'utf-8')
 
   const lines = mdText.split('\n')
   const headings: HeadingNode[] = []

@@ -4,6 +4,7 @@ packages:
 catalogs:
   build:
     unbuild: ^3.5.0
+    vitepress: ^1.6.3
   cli:
     bumpp: ^10.2.0
     czg: ^1.11.1
@@ -28,6 +29,7 @@ catalogs:
     fs-extra: ^11.3.0
     pathe: ^2.0.3
     rimraf: ^6.0.1
+    tinyglobby: ^0.2.14
     unconfig: ^7.3.2
   script:
     tsx: ^4.20.3
