@@ -7,15 +7,15 @@ catalogs:
     vitepress: ^1.6.3
   cli:
     bumpp: ^10.2.0
-    czg: ^1.11.1
+    czg: ^1.11.2
     pncat: ^0.2.5
     taze: ^19.1.0
   dev:
     '@octohash/tsconfig': ^0.1.0
     typescript: ^5.8.3
   lint:
-    '@antfu/eslint-config': ^4.16.1
-    eslint: ^9.30.0
+    '@antfu/eslint-config': ^4.16.2
+    eslint: ^9.30.1
     lint-staged: ^16.1.2
     simple-git-hooks: ^2.13.0
   markdown:
@@ -37,5 +37,5 @@ catalogs:
     vitest: ^3.2.4
   types:
     '@types/fs-extra': ^11.0.4
-    '@types/node': ^24.0.8
+    '@types/node': ^24.0.10
     '@types/turndown': ^5.0.5

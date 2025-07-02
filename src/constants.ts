@@ -17,6 +17,6 @@ export const TEMP_MARKDOWN = 'temp.md'
 export const TEMP_HTML = 'temp.html'
 export const TEMP_FILES = [TEMP_MARKDOWN, TEMP_HTML]
 
-export const DEFAULT_PROJECT_NAME = 'playground'
+export const DEFAULT_PROJECT_NAME = 'docs'
 export const DEFAULT_PROJECT_TITLE = 'vitepress'
 export const DEFAULT_SIDEBAR_PATH = 'guide'
