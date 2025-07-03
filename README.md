@@ -14,6 +14,8 @@ TurnPress is a CLI tool that converts both Markdown (.md) and Word (.docx) files
 pnpx turnpress --docx ./test.docx
 ```
 
+![Image](/assets/screenshot.png)
+
 ## Features
 
 ### Convert

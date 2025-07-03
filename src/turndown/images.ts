@@ -9,7 +9,7 @@ export function images(turndownService: TurndownService, replacement: (content: 
       const style = node.getAttribute('style') || ''
 
       const srcText = replacement ? replacement(src) : src
-      const styleText = style ? `style="${style};display:inline-block;"` : `style="display:inline-block;"`
+      const styleText = style ? `${style};display:inline-block;` : `display:inline-block;`
 
       return `<img src="${srcText}" alt="${alt}" style="${styleText}">`
     },

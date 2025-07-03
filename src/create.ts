@@ -53,7 +53,7 @@ async function setupProject(options: {
   await copy(resolve(workspace, 'sidebar.json'), resolve(cwd, './.vitepress/sidebar.json'))
 
   await mkdir(resolve(cwd, `./src/${basePath}`))
-  await copy(resolve(workspace, 'assets'), resolve(cwd, `./src/${basePath}/static`))
+  await copy(resolve(workspace, 'assets'), resolve(cwd, `./src/${basePath}/assets`))
 
   await copyArticle(workspace, cwd, basePath)
   await updatePackageJson(cwd, name)
