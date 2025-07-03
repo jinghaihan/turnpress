@@ -8,8 +8,9 @@ import { execa } from 'execa'
 import { exists } from 'fs-extra'
 import { resolve } from 'pathe'
 import TurndownService from 'turndown'
-import { gfm } from 'turndown-plugin-gfm'
 import { TEMP_HTML, TEMP_MARKDOWN } from './constants'
+import { images } from './turndown/images'
+import { plugins } from './turndown/plugins'
 
 export async function convertDocxToHtml(options: Options) {
   const { workspace, pandoc, docx } = options
@@ -33,7 +34,7 @@ export async function convertDocxToHtml(options: Options) {
       docx,
       '-o',
       resolve(workspace, TEMP_MARKDOWN),
-      `--extract-media=${resolve(workspace, 'images')}`,
+      `--extract-media=${resolve(workspace, 'assets')}`,
       '-t',
       'markdown_strict',
       '--wrap=preserve',
@@ -69,22 +70,9 @@ export async function convertHtmlToMarkdown(options: Options) {
   const turndownService = new TurndownService({
     headingStyle: 'atx',
   })
-  turndownService.use(gfm)
-  turndownService.addRule('strong', {
-    filter: ['strong', 'b'],
-    replacement(content) {
-      return `**${content}** `
-    },
-  })
-  turndownService.addRule('image', {
-    filter: ['img'],
-    replacement(_, node) {
-      const src = node.getAttribute('src')?.replace?.(`${workspace}/`, './') || ''
-      const alt = node.getAttribute('alt') || ''
-      const style = node.getAttribute('style') || ''
-
-      return `<img src="${src}" alt="${alt}" style="${style};display:inline-block;">`
-    },
+  turndownService.use(plugins)
+  turndownService.use((turndownService: TurndownService) => {
+    images(turndownService, (src: string) => src.replace(workspace, '.'))
   })
 
   const markdown = turndownService.turndown($.html())
