@@ -5,10 +5,10 @@
 [![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
 
-TurnPress is a CLI tool that converts .docx files into Vitepress-compatible Markdown, leveraging Pandoc and Turndown to split and structure documents for seamless Vitepress integration.
+TurnPress is a CLI tool that converts both Markdown (.md) and Word (.docx) files into Vitepress-compatible Markdown format. It utilizes Pandoc for document conversion and Turndown for HTML-to-Markdown transformation, automatically splitting and structuring content for seamless Vitepress integration.
 
 > [!NOTE]
-> This project requires Pandoc to function properly. Please ensure you have [Pandoc](https://github.com/jgm/pandoc) installed before using it.
+> Pandoc is required when converting DOCX files. Please ensure you have Pandoc installed if you need to process Word documents. Markdown conversion works without Pandoc.
 
 ```sh
 pnpx turnpress --docx ./test.docx
@@ -20,14 +20,18 @@ pnpx turnpress --docx ./test.docx
 
 ```sh
 pnpx turnpress convert --docx ./test.docx
+# or for Markdown files
+pnpx turnpress convert --md ./input.md
 ```
 
-The convert command (default) processes the specified DOCX file, splitting its content and generating a corresponding sidebar structure based on the document's headings. This is suitable for integrating the output into an existing VitePress project.
+The convert command (default) processes the specified DOCX or Markdown file, splitting its content and generating a corresponding sidebar structure based on the document's headings. This is suitable for integrating the output into an existing VitePress project.
 
 ### Create
 
 ```sh
 pnpx turnpress create --docx ./test.docx
+# or for Markdown files
+pnpx turnpress create --md ./input.md
 ```
 
 The create command performs the same conversion as convert, then interactively generates a VitePress template through prompts and directly integrates the processed content and images. This is ideal for initializing a new VitePress project.
@@ -46,22 +50,27 @@ export default defineConfig({
 
 You can also use environment variables to customize behavior.
 
-| Option                  | Description                                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| `--docx, -d <path>`         | **Input file**: Path to the `.docx` file (required).         |
-| `--pandoc, -p <path>`       | **Pandoc path**: Custom path to Pandoc executable. |
-| `--workspace, -w <dir>` | **Work directory**: Where generated are saved (default: `./turnpress`). |
+| Option                     | Description                                                                 |
+| -------------------------- | --------------------------------------------------------------------------- |
+| `--file`, `-f` `<path>`    | **Input file**: Path to the source file (auto-detects file type).           |
+| `--docx` `<path>`          | **Input file**: Path to the `.docx` file.                                   |
+| `--md` `<path>`            | **Input file**: Path to the `.md` file.                                     |
+| `--pandoc` `<path>`        | **Pandoc path**: Custom path to the Pandoc executable.                      |
+| `--workspace`, `-w` `<dir>`| **Work directory**: Where generated files are saved (default: `./turnpress`). |
 
 ## How it Works
 
-1. **Pandoc**: Converts `.docx` → HTML.
-2. **Turndown**: Transforms HTML → structured Markdown.
-3. **Vitepress Optimization**:
-   - Splits documents by headings (e.g., `#` → separate files).
+1. **For DOCX files**:
+   - Pandoc converts `.docx` → HTML
+   - Turndown transforms HTML → structured Markdown
+2. **For Markdown files**:
+   - Directly processes and optimizes existing Markdown
+3. **Vitepress Optimization** (for both):
+   - Splits documents by headings (e.g., `#` → separate files)
 
 ## Why turnpress?
 
-Some teams prefer writing documentation in DOCX format but need to deploy it as an offline documentation site. While Pandoc can convert DOCX to Markdown directly, the output often doesn't follow standard structure and may have compatibility issues with Vitepress. That's why we use Turndown to convert the HTML output from Pandoc for better results.
+Some teams prefer writing documentation in DOCX or Markdown format but need to deploy it as an offline documentation site. While Pandoc can convert DOCX to Markdown directly and Markdown requires optimization, the output often doesn't follow standard structure and may have compatibility issues with Vitepress. That's why I use Turndown to convert the HTML output from Pandoc for DOCX files and direct processing for Markdown files to achieve better results.
 
 ## License
 

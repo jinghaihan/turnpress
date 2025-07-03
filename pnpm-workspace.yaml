@@ -13,6 +13,8 @@ catalogs:
   dev:
     '@octohash/tsconfig': ^0.1.0
     typescript: ^5.8.3
+  frontend:
+    vue: ^3.5.17
   lint:
     '@antfu/eslint-config': ^4.16.2
     eslint: ^9.30.1
@@ -24,13 +26,14 @@ catalogs:
     '@clack/prompts': ^0.11.0
     ansis: ^4.1.0
     cac: ^6.7.14
-    cheerio: ^1.1.0
     execa: ^9.6.0
     fs-extra: ^11.3.0
     pathe: ^2.0.3
     rimraf: ^6.0.1
     tinyglobby: ^0.2.14
     unconfig: ^7.3.2
+  prod:
+    medium-zoom: ^1.1.0
   script:
     tsx: ^4.20.3
   test:
@@ -39,3 +42,5 @@ catalogs:
     '@types/fs-extra': ^11.0.4
     '@types/node': ^24.0.10
     '@types/turndown': ^5.0.5
+  utils:
+    cheerio: ^1.1.0

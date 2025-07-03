@@ -1,8 +1,10 @@
-import type { MODE_CHOICES } from './constants'
+import type { FILE_TYPE_CHOICES, MODE_CHOICES } from './constants'
 
 export type RangeMode = typeof MODE_CHOICES[number]
 
-export type Options = Required<CommandOptions>
+export type FileType = typeof FILE_TYPE_CHOICES[number]
+
+export type Options = Required<CommandOptions & { type: FileType }>
 
 export interface CommonOptions {
   mode?: RangeMode
@@ -21,9 +23,17 @@ export interface CommandOptions extends CommonOptions {
    */
   pandoc?: string
   /**
+   * Path to source file, auto-detect file type
+   */
+  file?: string
+  /**
    * Path to source DOCX file
    */
   docx?: string
+  /**
+   * Path to source Markdown file
+   */
+  md?: string
   /**
    * Directory for generated files
    * @default './turnpress'

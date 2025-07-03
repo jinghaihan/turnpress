@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.2.1",
   "packageManager": "pnpm@10.12.4",
-  "description": "Docx to VitePress converter, powered by pandoc and turndown.",
+  "description": "Markdown, Docx to VitePress converter, powered by pandoc and turndown.",
   "author": "jinghaihan",
   "license": "MIT",
   "homepage": "https://github.com/jinghaihan/turnpress#readme",
@@ -15,12 +15,12 @@
     "url": "https://github.com/jinghaihan/turnpress/issues"
   },
   "keywords": [
+    "markdown",
     "docx",
     "vitepress",
     "converter",
     "pandoc",
-    "turndown",
-    "markdown"
+    "turndown"
   ],
   "exports": {
     ".": "./dist/index.mjs",
@@ -56,7 +56,7 @@
     "@clack/prompts": "catalog:node",
     "ansis": "catalog:node",
     "cac": "catalog:node",
-    "cheerio": "catalog:node",
+    "cheerio": "catalog:utils",
     "execa": "catalog:node",
     "fs-extra": "catalog:node",
     "pathe": "catalog:node",

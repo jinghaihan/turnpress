@@ -57,16 +57,12 @@ export const themeConfig: Partial<DefaultTheme.Config> = {
     label: '页面导航',
   },
   returnToTopLabel: '回到顶部',
-  footer: {
-    copyright: `Copyright © ${new Date().getFullYear()}-present [author]`,
-    message: 'Released under the MIT License.',
-  },
-  lastUpdated: {
-    formatOptions: {
-      dateStyle: 'short',
-      timeStyle: 'medium',
-    },
-    text: '最后更新于',
-  },
+  // lastUpdated: {
+  //   formatOptions: {
+  //     dateStyle: 'short',
+  //     timeStyle: 'medium',
+  //   },
+  //   text: '最后更新于',
+  // },
   sidebarMenuLabel: '菜单',
 }

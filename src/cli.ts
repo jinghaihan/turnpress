@@ -1,9 +1,11 @@
 import type { CAC } from 'cac'
-import type { CommandOptions, RangeMode } from './types'
+import type { CommandOptions, FileType, Options, RangeMode } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
+import { copy, exists } from 'fs-extra'
+import { basename, resolve } from 'pathe'
 import { version } from '../package.json'
 import { cleanTempFiles } from './cleaner'
 import { resolveConfig } from './config'
@@ -16,15 +18,40 @@ import { splitMarkdown } from './splitter'
 try {
   const cli: CAC = cac('turnpress')
 
+  const prepare: Record<FileType, (options: Options) => Promise<void>> = {
+    docx: async (options: Options) => {
+      p.log.step('Converting DOCX → HTML')
+      await convertDocxToHtml(options)
+
+      p.log.step('Transforming HTML → Markdown')
+      await convertHtmlToMarkdown(options)
+    },
+    md: async (options: Options) => {
+      p.log.step('Moving Markdown → Workspace')
+
+      const source = resolve(process.cwd(), options.md)
+      const target = resolve(options.workspace, basename(source))
+
+      if (await exists(target)) {
+        p.log.warn('File already exists')
+      }
+      else {
+        await copy(source, target)
+      }
+    },
+  }
+
   cli
-    .command('[mode]', 'Convert DOCX document to Vitepress-ready Markdown')
-    .option('--docx, -d <path>', 'Path to source DOCX file')
-    .option('--pandoc, -p <path>', 'Specify path to Pandoc executable')
+    .command('[mode]', 'Convert Markdown, Docx document to Vitepress-ready Markdown')
+    .option('--file, -f <path>', 'Path to source file')
+    .option('--docx <path>', 'Path to source DOCX file')
+    .option('--md <path>', 'Path to source Markdown file')
+    .option('--pandoc <path>', 'Specify path to Pandoc executable')
     .option('--workspace, -w <path>', 'Directory for generated files')
     .action(async (mode: RangeMode, options: Partial<CommandOptions>) => {
       if (mode) {
         if (!MODE_CHOICES.includes(mode)) {
-          console.error(`Invalid mode: ${mode}. Please use one of the following: ${MODE_CHOICES.join('|')}`)
+          p.log.error(`Invalid mode: ${mode}. Please use one of the following: ${MODE_CHOICES.join('|')}`)
           process.exit(1)
         }
         options.mode = mode
@@ -32,32 +59,27 @@ try {
 
       p.intro(`${c.yellow`turnpress `}${c.dim`v${version}`}`)
 
-      const resolved = await resolveConfig(options)
-
-      p.log.step('Converting DOCX → HTML')
-      await convertDocxToHtml(resolved)
-
-      p.log.step('Transforming HTML → Markdown')
-      await convertHtmlToMarkdown(resolved)
+      const config = await resolveConfig(options)
+      await prepare[config.type](config)
 
       p.log.step('Splitting Markdown by headings')
-      const nested = await splitMarkdown(resolved)
+      const nested = await splitMarkdown(config)
 
       p.log.step('Generating VitePress sidebar structure')
-      await generateSidebar(nested, resolved)
+      await generateSidebar(nested, config)
 
-      if (resolved.clean) {
+      if (config.clean) {
         p.log.step('Cleaning temporary files')
-        await cleanTempFiles(resolved)
+        await cleanTempFiles(config)
       }
 
-      if (resolved.mode === 'convert') {
+      if (config.mode === 'convert') {
         p.outro('Convert completed')
         process.exit(1)
       }
       else {
         p.log.step('Convert completed')
-        await create(resolved)
+        await create(config)
       }
     })
 

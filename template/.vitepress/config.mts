@@ -24,6 +24,10 @@ export default defineConfig({
     sidebar: {
       '/[path]/': { base: '/[path]/', items: sidebar },
     },
+    footer: {
+      copyright: `Copyright © ${new Date().getFullYear()}-present`,
+      message: 'Released under the MIT License.',
+    },
     ...themeConfig,
   },
 })

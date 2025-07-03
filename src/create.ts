@@ -14,7 +14,7 @@ import { __dirname, DEFAULT_PROJECT_NAME, DEFAULT_PROJECT_TITLE, DEFAULT_SIDEBAR
 
 export async function create(options: Options) {
   const { workspace } = options
-  const [name, title] = await getProjectName()
+  const [name, title] = await getProjectMeta()
   const basePath = await getSidebarPath()
   const redirect = await getRedirectPath(options)
 
@@ -79,7 +79,12 @@ async function updatePackageJson(cwd: string, name: string) {
 async function updateConfig(cwd: string, title: string, basePath: string) {
   const path = resolve(cwd, './.vitepress/config.mts')
   const content = await readFile(path, 'utf-8')
-  await writeFile(path, content.replaceAll('[title]', title).replaceAll('[path]', basePath))
+  await writeFile(
+    path,
+    content
+      .replaceAll('[title]', title)
+      .replaceAll('[path]', basePath),
+  )
 }
 
 async function updateRedirect(cwd: string, basePath: string, redirect: string) {
@@ -100,7 +105,7 @@ async function runProject(cwd: string) {
   await execa('pnpm', ['dev'], { stdio: 'inherit', cwd })
 }
 
-async function getProjectName(): Promise<string[]> {
+async function getProjectMeta(): Promise<string[]> {
   const name = await p.text({
     message: 'Enter a name for the directory',
     initialValue: DEFAULT_PROJECT_NAME,
@@ -114,16 +119,16 @@ async function getProjectName(): Promise<string[]> {
   const cwd = resolve(process.cwd(), name)
   if (await exists(cwd)) {
     const result = await p.select({
-      message: c.yellow('Directory already exists. Please choose another name'),
+      message: c.yellow('Directory already exists, change another one?'),
       options: [
         { value: 'y', label: 'Yes' },
-        { value: 'n', label: 'No (Delete directory and continue)' },
+        { value: 'n', label: 'No (Delete and continue)' },
       ],
       initialValue: 'y',
     })
 
     if (result === 'y')
-      return getProjectName()
+      return getProjectMeta()
 
     await rimraf(cwd)
   }

@@ -3,6 +3,8 @@ import process from 'node:process'
 
 export const __dirname = new URL('.', import.meta.url).pathname
 
+export const FILE_TYPE_CHOICES = ['docx', 'md'] as const
+
 export const MODE_CHOICES = ['convert', 'create'] as const
 
 export const DEFAULT_OPTIONS: CommandOptions = {
