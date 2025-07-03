@@ -63,6 +63,7 @@
     "rimraf": "catalog:node",
     "tinyglobby": "catalog:node",
     "turndown": "catalog:markdown",
+    "turndown-plugin-gfm": "catalog:markdown",
     "unconfig": "catalog:node"
   },
   "devDependencies": {

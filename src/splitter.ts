@@ -27,7 +27,8 @@ export async function splitMarkdown(options: Options) {
 
       const level = match[1]!.length
       const rawTitle = match[2]!.trim()
-      const title = rawTitle.replace(/^\d+(?:\.\d+)*\.?\s+/, '')
+      // eslint-disable-next-line regexp/optimal-quantifier-concatenation
+      const title = rawTitle.replace(/^([\d.\\]+)\.?\s+/, '')
 
       currentHeading = {
         level,

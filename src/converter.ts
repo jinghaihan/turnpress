@@ -8,6 +8,7 @@ import { execa } from 'execa'
 import { exists } from 'fs-extra'
 import { resolve } from 'pathe'
 import TurndownService from 'turndown'
+import { gfm } from 'turndown-plugin-gfm'
 import { TEMP_HTML, TEMP_MARKDOWN } from './constants'
 
 export async function convertDocxToHtml(options: Options) {
@@ -68,6 +69,7 @@ export async function convertHtmlToMarkdown(options: Options) {
   const turndownService = new TurndownService({
     headingStyle: 'atx',
   })
+  turndownService.use(gfm)
   turndownService.addRule('strong', {
     filter: ['strong', 'b'],
     replacement(content) {

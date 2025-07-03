@@ -49,6 +49,9 @@ catalogs:
     turndown:
       specifier: ^7.2.0
       version: 7.2.0
+    turndown-plugin-gfm:
+      specifier: ^1.0.2
+      version: 1.0.2
   node:
     '@clack/prompts':
       specifier: ^0.11.0
@@ -134,6 +137,9 @@ importers:
       turndown:
         specifier: catalog:markdown
         version: 7.2.0
+      turndown-plugin-gfm:
+        specifier: catalog:markdown
+        version: 1.0.2
       unconfig:
         specifier: catalog:node
         version: 7.3.2
@@ -3131,6 +3137,9 @@ packages:
     resolution: {integrity: sha512-qjbnuR9Tr+FJOMBqJCW5ehvIo/buZq7vH7qD7JziU98h6l3qGy0a/yPFjwO+y0/T7GFpNgNAvEcPPVfyT8rrPQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  turndown-plugin-gfm@1.0.2:
+    resolution: {integrity: sha512-vwz9tfvF7XN/jE0dGoBei3FXWuvll78ohzCZQuOb+ZjWrs3a0XhQVomJEb2Qh4VHTPNRO4GPZh0V7VRbiWwkRg==}
 
   turndown@7.2.0:
     resolution: {integrity: sha512-eCZGBN4nNNqM9Owkv9HAtWRYfLA4h909E/WGAWWBpmB275ehNhZyk87/Tpvjbp0jjNl9XwCsbe6bm6CqFsgD+A==}
@@ -6581,6 +6590,8 @@ snapshots:
       get-tsconfig: 4.10.1
     optionalDependencies:
       fsevents: 2.3.3
+
+  turndown-plugin-gfm@1.0.2: {}
 
   turndown@7.2.0:
     dependencies:

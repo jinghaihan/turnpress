@@ -22,6 +22,7 @@ catalogs:
     simple-git-hooks: ^2.13.0
   markdown:
     turndown: ^7.2.0
+    turndown-plugin-gfm: ^1.0.2
   node:
     '@clack/prompts': ^0.11.0
     ansis: ^4.1.0
