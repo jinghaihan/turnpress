@@ -1,7 +1,7 @@
 import type { Image, Options } from './types'
 import { readFile, writeFile } from 'node:fs/promises'
 import * as p from '@clack/prompts'
-import { basename, dirname, resolve } from 'pathe'
+import { basename, dirname, extname, resolve } from 'pathe'
 import { TEMP_MARKDOWN } from './constants'
 import { copy } from './utils'
 
@@ -41,6 +41,15 @@ export function parseMarkdownImages(basePath: string, markdown: string): Image[]
   const cache = new Set()
   const counter = new Map<string, number>()
 
+  const getImageName = (name: string) => {
+    const count = counter.get(name)!
+    if (count === 1)
+      return name
+
+    const ext = extname(name)
+    return `${name.slice(0, -ext.length)}-${count}${ext}`
+  }
+
   for (const match of markdown.matchAll(imageRegex)) {
     const isMarkdownSyntax = !!match[1]
     const altText = isMarkdownSyntax ? match[2] : ''
@@ -61,7 +70,7 @@ export function parseMarkdownImages(basePath: string, markdown: string): Image[]
       counter.set(name, 1)
 
     images.push({
-      name: counter.get(name)! > 1 ? `${name}.${counter.get(name)}` : name,
+      name: getImageName(name),
       url: imageUrl,
       path: resolve(basePath, imageUrl),
       alt: altText,
