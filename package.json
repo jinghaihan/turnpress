@@ -59,6 +59,7 @@
     "cheerio": "catalog:utils",
     "execa": "catalog:node",
     "fs-extra": "catalog:node",
+    "nanoid": "catalog:utils",
     "pathe": "catalog:node",
     "rimraf": "catalog:node",
     "tinyglobby": "catalog:node",

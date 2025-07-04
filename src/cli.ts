@@ -4,16 +4,17 @@ import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
-import { copy, exists } from 'fs-extra'
-import { basename, resolve } from 'pathe'
+import { resolve } from 'pathe'
 import { version } from '../package.json'
 import { cleanTempFiles } from './cleaner'
 import { resolveConfig } from './config'
-import { MODE_CHOICES } from './constants'
+import { MODE_CHOICES, TEMP_MARKDOWN } from './constants'
 import { convertDocxToHtml, convertHtmlToMarkdown } from './converter'
 import { create } from './create'
+import { markdownMediaExtractor } from './extractor'
 import { generateSidebar } from './sidebar'
 import { splitMarkdown } from './splitter'
+import { copy } from './utils'
 
 try {
   const cli: CAC = cac('turnpress')
@@ -27,17 +28,10 @@ try {
       await convertHtmlToMarkdown(options)
     },
     md: async (options: Options) => {
-      p.log.step('Moving Markdown → Workspace')
+      p.log.step('Copying Markdown → Workspace')
+      await copy(resolve(process.cwd(), options.md), resolve(options.workspace, TEMP_MARKDOWN))
 
-      const source = resolve(process.cwd(), options.md)
-      const target = resolve(options.workspace, basename(source))
-
-      if (await exists(target)) {
-        p.log.warn('File already exists')
-      }
-      else {
-        await copy(source, target)
-      }
+      await markdownMediaExtractor(options)
     },
   }
 

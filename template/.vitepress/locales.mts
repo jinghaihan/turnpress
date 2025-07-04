@@ -57,6 +57,7 @@ export const themeConfig: Partial<DefaultTheme.Config> = {
     label: '页面导航',
   },
   returnToTopLabel: '回到顶部',
+  sidebarMenuLabel: '菜单',
   // lastUpdated: {
   //   formatOptions: {
   //     dateStyle: 'short',
@@ -64,5 +65,4 @@ export const themeConfig: Partial<DefaultTheme.Config> = {
   //   },
   //   text: '最后更新于',
   // },
-  sidebarMenuLabel: '菜单',
 }

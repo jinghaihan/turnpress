@@ -1,16 +1,17 @@
 import type { DefaultTheme } from 'vitepress'
 import type { Options } from './types'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
-import { copy, exists } from 'fs-extra'
+import { exists } from 'fs-extra'
 import { resolve } from 'pathe'
 import { rimraf } from 'rimraf'
 import { glob } from 'tinyglobby'
 import { cleanWorkspace } from './cleaner'
-import { __dirname, DEFAULT_PROJECT_NAME, DEFAULT_PROJECT_TITLE, DEFAULT_SIDEBAR_PATH } from './constants'
+import { __dirname, DEFAULT_PROJECT_NAME, DEFAULT_PROJECT_TITLE, DEFAULT_SIDEBAR_PATH, TEMP_MARKDOWN } from './constants'
+import { copy } from './utils'
 
 export async function create(options: Options) {
   const { workspace } = options
@@ -48,11 +49,9 @@ async function setupProject(options: {
 }) {
   const { workspace, cwd, name, title, basePath, redirect } = options
 
-  await mkdir(cwd)
   await copy(resolve(__dirname, '../template'), cwd)
   await copy(resolve(workspace, 'sidebar.json'), resolve(cwd, './.vitepress/sidebar.json'))
 
-  await mkdir(resolve(cwd, `./src/${basePath}`))
   await copy(resolve(workspace, 'assets'), resolve(cwd, `./src/${basePath}/assets`))
 
   await copyArticle(workspace, cwd, basePath)
@@ -63,9 +62,11 @@ async function setupProject(options: {
 
 async function copyArticle(workspace: string, cwd: string, basePath: string) {
   const files = await glob('**/*.md', { cwd: workspace })
-  await Promise.all(files.map(
-    file => copy(resolve(workspace, file), resolve(cwd, `./src/${basePath}/${file}`)),
-  ))
+  await Promise.all(
+    files
+      .filter(file => file !== TEMP_MARKDOWN)
+      .map(file => copy(resolve(workspace, file), resolve(cwd, `./src/${basePath}/${file}`))),
+  )
 }
 
 async function updatePackageJson(cwd: string, name: string) {
@@ -117,7 +118,8 @@ async function getProjectMeta(): Promise<string[]> {
   }
 
   const cwd = resolve(process.cwd(), name)
-  if (await exists(cwd)) {
+  const e = await exists(cwd)
+  if (e) {
     const result = await p.select({
       message: c.yellow('Directory already exists, change another one?'),
       options: [

@@ -16,16 +16,17 @@ export async function convertDocxToHtml(options: Options) {
   const { workspace, pandoc, docx } = options
 
   if (!pandoc) {
-    p.outro(c.red('pandoc not found, aborting'))
+    p.outro(c.red('Pandoc not found, aborting'))
     process.exit(1)
   }
 
   if (!docx) {
-    p.outro(c.red('docx not found, aborting'))
+    p.outro(c.red('Docx not found, aborting'))
     process.exit(1)
   }
 
-  if (!(await exists(resolve(workspace))))
+  const e = await exists(resolve(workspace))
+  if (!e)
     await mkdir(resolve(workspace))
 
   await execa(

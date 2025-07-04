@@ -1,6 +1,7 @@
 import type { CommandOptions, Options } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
+import c from 'ansis'
 import { extname, isAbsolute, resolve } from 'pathe'
 import { createConfigLoader } from 'unconfig'
 import { DEFAULT_OPTIONS, FILE_TYPE_CHOICES } from './constants'
@@ -50,7 +51,7 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<O
 
   merged.type = getFileType(merged)
   if (!merged.type) {
-    p.log.error(`Invalid file type. Please use one of the following: ${FILE_TYPE_CHOICES.join('|')}`)
+    p.outro(c.red(`Invalid file type. Please use one of the following: ${FILE_TYPE_CHOICES.join('|')}`))
     process.exit(1)
   }
 

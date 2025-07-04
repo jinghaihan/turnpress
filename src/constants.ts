@@ -15,8 +15,8 @@ export const DEFAULT_OPTIONS: CommandOptions = {
   workspace: './turnpress',
 }
 
-export const TEMP_MARKDOWN = 'temp.md'
-export const TEMP_HTML = 'temp.html'
+export const TEMP_MARKDOWN = '__temp.md'
+export const TEMP_HTML = '__temp.html'
 export const TEMP_FILES = [TEMP_MARKDOWN, TEMP_HTML]
 
 export const DEFAULT_PROJECT_NAME = 'docs'
