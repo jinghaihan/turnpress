@@ -50,8 +50,8 @@ export interface HeadingNode {
 }
 
 export interface Image {
-  id: string
   name: string
-  rawUrl: string
   url: string
+  path: string
+  alt: string
 }

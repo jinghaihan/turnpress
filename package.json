@@ -46,11 +46,12 @@
     "lint": "eslint",
     "commit": "czg",
     "deps": "taze major -I",
-    "release": "pnpm build && bumpp && pnpm publish --no-git-checks",
+    "release": "bumpp && pnpm publish --no-git-checks",
     "catalog": "pncat",
     "prepare": "npx simple-git-hooks",
     "bootstrap": "pnpm install",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@clack/prompts": "catalog:node",
@@ -59,7 +60,6 @@
     "cheerio": "catalog:utils",
     "execa": "catalog:node",
     "fs-extra": "catalog:node",
-    "nanoid": "catalog:utils",
     "pathe": "catalog:node",
     "rimraf": "catalog:node",
     "tinyglobby": "catalog:node",

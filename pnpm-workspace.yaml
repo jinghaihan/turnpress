@@ -8,7 +8,7 @@ catalogs:
   cli:
     bumpp: ^10.2.0
     czg: ^1.11.2
-    pncat: ^0.2.5
+    pncat: ^0.2.6
     taze: ^19.1.0
   dev:
     '@octohash/tsconfig': ^0.1.0
@@ -44,4 +44,3 @@ catalogs:
     '@types/turndown': ^5.0.5
   utils:
     cheerio: ^1.1.0
-    nanoid: ^5.1.5
