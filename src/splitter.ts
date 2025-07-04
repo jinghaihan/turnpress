@@ -29,6 +29,12 @@ export async function splitMarkdown(options: Options) {
       const rawTitle = match[2]!.trim()
       // eslint-disable-next-line regexp/optimal-quantifier-concatenation
       const title = rawTitle.replace(/^([\d.\\]+)\.?\s+/, '')
+        .replace(/\*\*(.*?)\*\*/g, '$1') // remove bold **text**
+        .replace(/\*(.*?)\*/g, '$1') // remove italic *text*
+        .replace(/~~(.*?)~~/g, '$1') // remove strikethrough ~~text~~
+        .replace(/`(.*?)`/g, '$1') // remove inline code `text`
+        .replace(/_{1,2}(.*?)_{1,2}/g, '$1') // remove underline _text_ or __text__
+        .trim()
 
       currentHeading = {
         level,
