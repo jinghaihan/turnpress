@@ -63,12 +63,21 @@ export async function convertDocxToHtml(options: Options) {
   )
 }
 
+async function loadAndFixHtml(path: string) {
+  const html = await readFile(path, 'utf-8')
+
+  const fixed = html
+    .replace(/[“”]([^“”]*)[“”]/g, (_, p) => `“${p}”`) // fix chinese double quotes
+
+  return fixed
+}
+
 export async function convertHtmlToMarkdown(options: Options) {
   const { workspace } = options
 
-  const html = await readFile(resolve(workspace, TEMP_HTML), 'utf-8')
+  const html = await loadAndFixHtml(resolve(workspace, TEMP_HTML))
   const $ = cheerio.load(html)
-  $('title, style').remove()
+  $('title, style, figcaption').remove()
 
   const turndownService = new TurndownService({
     headingStyle: 'atx',
