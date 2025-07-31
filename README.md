@@ -1,7 +1,6 @@
 # turnpress
 
 [![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![bundle][bundle-src]][bundle-href]
 [![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
@@ -12,36 +11,52 @@ TurnPress is a CLI tool that converts both Markdown (.md) and Word (.docx) files
 > Pandoc is required when converting DOCX files. Please ensure you have Pandoc installed if you need to process Word documents. Markdown conversion works without Pandoc.
 
 ```sh
-pnpx turnpress --docx ./test.docx
+npx turnpress --docx ./test.docx
 ```
 
-![Image](/assets/screenshot.png)
+<p align='center'>
+<img src='./assets/screenshot.png' width='500'/>
+</p>
 
 ## Features
 
 ### Convert
 
 ```sh
-pnpx turnpress convert --docx ./test.docx
+npx turnpress convert --docx ./test.docx
 # or for Markdown files
-pnpx turnpress convert --md ./input.md
+npx turnpress convert --md ./input.md
 ```
 
-The convert command (default) processes the specified DOCX or Markdown file, splitting its content and generating a corresponding sidebar structure based on the document's headings. This is suitable for integrating the output into an existing VitePress project.
+The `convert` command processes your document and generates a structured output ready for integration into an existing VitePress project. It:
+
+- **Splits content by headings**: Automatically creates separate files for each heading level
+- **Generates sidebar structure**: Creates a `sidebar.json` file with proper navigation
+- **Extracts and organizes media**: Handles images and other assets
+- **Optimizes for VitePress**: Ensures compatibility with VitePress's requirements
+
+Perfect for when you want to add new documentation to an existing VitePress site.
 
 ### Create
 
 ```sh
-pnpx turnpress create --docx ./test.docx
+npx turnpress create --docx ./test.docx
 # or for Markdown files
-pnpx turnpress create --md ./input.md
+npx turnpress create --md ./input.md
 ```
 
-The create command performs the same conversion as convert, then interactively generates a VitePress template through prompts and directly integrates the processed content and images. This is ideal for initializing a new VitePress project.
+The `create` command goes beyond conversion by setting up a complete new VitePress project. It:
+
+- **Performs all conversion tasks**: Same as the convert command
+- **Generates project structure**: Creates a full VitePress project with proper configuration
+- **Interactive setup**: Prompts for project name, title, and other settings
+- **Ready to run**: Installs dependencies and can start the development server immediately
+
+Ideal for creating new documentation sites from scratch.
 
 ## Configuration
 
-Create a `turnpress.config.ts` file to customize behavior.
+Create a `turnpress.config.ts` file to customize behavior:
 
 ```ts
 import { defineConfig } from 'turnpress'
@@ -51,15 +66,13 @@ export default defineConfig({
 })
 ```
 
-You can also use environment variables to customize behavior.
+You can also use command-line options to customize behavior:
 
-| Option                     | Description                                                                 |
-| -------------------------- | --------------------------------------------------------------------------- |
-| `--file`, `-f` `<path>`    | **Input file**: Path to the source file (auto-detects file type).           |
-| `--docx` `<path>`          | **Input file**: Path to the `.docx` file.                                   |
-| `--md` `<path>`            | **Input file**: Path to the `.md` file.                                     |
-| `--pandoc` `<path>`        | **Pandoc path**: Custom path to the Pandoc executable.                      |
-| `--workspace`, `-w` `<dir>`| **Work directory**: Where generated files are saved (default: `./turnpress`). |
+- **`--file, -f <path>`**: Input file path (auto-detects file type)
+- **`--docx <path>`**: Path to the `.docx` file
+- **`--md <path>`**: Path to the `.md` file
+- **`--pandoc <path>`**: Custom path to the Pandoc executable
+- **`--workspace, -w <dir>`**: Work directory where generated files are saved (default: `./turnpress`)
 
 ## How it Works
 

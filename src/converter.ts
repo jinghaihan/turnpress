@@ -10,7 +10,7 @@ import { resolve } from 'pathe'
 import TurndownService from 'turndown'
 import { TEMP_HTML, TEMP_MARKDOWN } from './constants'
 import { images } from './turndown/images'
-import { plugins } from './turndown/plugins'
+import { turndownPlugins } from './turndown/plugins'
 
 export async function convertDocxToHtml(options: Options) {
   const { workspace, pandoc, docx } = options
@@ -79,13 +79,10 @@ export async function convertHtmlToMarkdown(options: Options) {
   const $ = cheerio.load(html)
   $('title, style, figcaption').remove()
 
-  const turndownService = new TurndownService({
-    headingStyle: 'atx',
-  })
-  turndownService.use(plugins)
-  turndownService.use((turndownService: TurndownService) => {
-    images(turndownService, (src: string) => src.replace(workspace, '.'))
-  })
+  const turndownService = new TurndownService({ headingStyle: 'atx' })
+  turndownService
+    .use(turndownPlugins)
+    .use((t: TurndownService) => images(t, (src: string) => src.replace(workspace, '.')))
 
   const markdown = turndownService.turndown($.html())
   await writeFile(resolve(workspace, TEMP_MARKDOWN), markdown)

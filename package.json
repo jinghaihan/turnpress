@@ -2,7 +2,7 @@
   "name": "turnpress",
   "type": "module",
   "version": "0.3.4",
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.14.0",
   "description": "Markdown, Docx to VitePress converter, powered by pandoc and turndown.",
   "author": "jinghaihan",
   "license": "MIT",

@@ -3,23 +3,21 @@ packages:
   - template
 catalogs:
   build:
-    unbuild: ^3.5.0
+    unbuild: ^3.6.0
     vitepress: ^1.6.3
   cli:
-    bumpp: ^10.2.0
-    czg: ^1.11.2
-    pncat: ^0.2.6
+    bumpp: ^10.2.2
+    czg: ^1.12.0
+    pncat: ^0.4.0
     taze: ^19.1.0
   dev:
     '@octohash/tsconfig': ^0.1.0
-    typescript: ^5.8.3
-  frontend:
-    vue: ^3.5.17
+    typescript: ^5.9.2
   lint:
-    '@antfu/eslint-config': ^4.16.2
-    eslint: ^9.30.1
+    '@antfu/eslint-config': ^5.0.0
+    eslint: ^9.32.0
     lint-staged: ^16.1.2
-    simple-git-hooks: ^2.13.0
+    simple-git-hooks: ^2.13.1
   markdown:
     turndown: ^7.2.0
   node:
@@ -32,15 +30,13 @@ catalogs:
     rimraf: ^6.0.1
     tinyglobby: ^0.2.14
     unconfig: ^7.3.2
-  prod:
-    medium-zoom: ^1.1.0
   script:
     tsx: ^4.20.3
   test:
     vitest: ^3.2.4
   types:
     '@types/fs-extra': ^11.0.4
-    '@types/node': ^24.0.10
+    '@types/node': ^24.1.0
     '@types/turndown': ^5.0.5
   utils:
-    cheerio: ^1.1.0
+    cheerio: ^1.1.2
