@@ -80,7 +80,6 @@
     "simple-git-hooks": "catalog:lint",
     "taze": "catalog:cli",
     "tsx": "catalog:script",
-    "turnpress": "workspace:*",
     "typescript": "catalog:dev",
     "unbuild": "catalog:build",
     "vitepress": "catalog:build",

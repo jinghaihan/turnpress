@@ -177,9 +177,6 @@ importers:
       tsx:
         specifier: catalog:script
         version: 4.20.3
-      turnpress:
-        specifier: workspace:*
-        version: 'link:'
       typescript:
         specifier: catalog:dev
         version: 5.9.2

@@ -15,7 +15,7 @@ npx turnpress --docx ./test.docx
 ```
 
 <p align='center'>
-<img src='./assets/screenshot.png' width='500'/>
+<img src='./assets/turnpress.png' width='500'/>
 </p>
 
 ## Features
