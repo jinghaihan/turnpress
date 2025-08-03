@@ -39,7 +39,7 @@
     "template"
   ],
   "scripts": {
-    "start": "tsx ./src/cli.ts",
+    "turnpress": "tsx ./src/cli.ts",
     "build": "unbuild",
     "typecheck": "tsc",
     "test": "vitest",

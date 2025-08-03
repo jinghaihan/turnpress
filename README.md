@@ -11,11 +11,11 @@ TurnPress is a CLI tool that converts both Markdown (.md) and Word (.docx) files
 > Pandoc is required when converting DOCX files. Please ensure you have Pandoc installed if you need to process Word documents. Markdown conversion works without Pandoc.
 
 ```sh
-npx turnpress --docx ./test.docx
+pnpx turnpress --docx ./test.docx
 ```
 
 <p align='center'>
-<img src='./assets/turnpress.png' width='500'/>
+<img src='./assets/screenshot.png' />
 </p>
 
 ## Features
@@ -23,9 +23,9 @@ npx turnpress --docx ./test.docx
 ### Convert
 
 ```sh
-npx turnpress convert --docx ./test.docx
+pnpx turnpress convert --docx ./test.docx
 # or for Markdown files
-npx turnpress convert --md ./input.md
+pnpx turnpress convert --md ./input.md
 ```
 
 The `convert` command processes your document and generates a structured output ready for integration into an existing VitePress project. It:
@@ -40,9 +40,9 @@ Perfect for when you want to add new documentation to an existing VitePress site
 ### Create
 
 ```sh
-npx turnpress create --docx ./test.docx
+pnpx turnpress create --docx ./test.docx
 # or for Markdown files
-npx turnpress create --md ./input.md
+pnpx turnpress create --md ./input.md
 ```
 
 The `create` command goes beyond conversion by setting up a complete new VitePress project. It:
