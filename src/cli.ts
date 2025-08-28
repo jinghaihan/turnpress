@@ -69,7 +69,7 @@ try {
 
       if (config.mode === 'convert') {
         p.outro('Convert completed')
-        process.exit(1)
+        process.exit(0)
       }
       else {
         p.log.step('Convert completed')

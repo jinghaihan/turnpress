@@ -25,5 +25,5 @@ dev-dist
 *.sln
 *.sw?
 
+/vitepress
 /turnpress
-/playground

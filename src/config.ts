@@ -43,7 +43,7 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<O
       message: `Enter the path to your file`,
     })
     if (!result || typeof result !== 'string') {
-      p.outro()
+      p.outro(c.red('Aborting'))
       process.exit(1)
     }
     merged.file = result
