@@ -55,3 +55,9 @@ export interface Image {
   path: string
   alt: string
 }
+
+export interface Spinner {
+  start: (msg?: string) => void
+  stop: (msg?: string, code?: number) => void
+  message: (msg?: string) => void
+}

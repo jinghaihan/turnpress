@@ -73,6 +73,7 @@
     "eslint": "catalog:lint",
     "lint-staged": "catalog:lint",
     "pncat": "catalog:cli",
+    "prettier": "catalog:lint",
     "simple-git-hooks": "catalog:lint",
     "taze": "catalog:cli",
     "tsx": "catalog:script",

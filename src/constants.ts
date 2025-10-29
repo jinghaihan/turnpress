@@ -1,5 +1,10 @@
 import type { CommandOptions } from './types'
 import process from 'node:process'
+import pkgJson from '../package.json'
+
+export const NAME = pkgJson.name
+
+export const VERSION = pkgJson.version
 
 export const __dirname = new URL('.', import.meta.url).pathname
 
@@ -19,6 +24,6 @@ export const TEMP_MARKDOWN = '__temp.md'
 export const TEMP_HTML = '__temp.html'
 export const TEMP_FILES = [TEMP_MARKDOWN, TEMP_HTML]
 
-export const DEFAULT_PROJECT_NAME = 'docs'
-export const DEFAULT_PROJECT_TITLE = 'vitepress'
+export const DEFAULT_PROJECT_NAME = 'vitepress'
+export const DEFAULT_PROJECT_TITLE = 'turnpress'
 export const DEFAULT_SIDEBAR_PATH = 'guide'

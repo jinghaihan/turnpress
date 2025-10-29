@@ -1,3 +1,4 @@
+/* eslint-disable regexp/no-dupe-disjunctions */
 import type { Options } from './types'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import process from 'node:process'
@@ -86,12 +87,22 @@ export async function convertHtmlToMarkdown(options: Options) {
 
   const markdown = turndownService.turndown($.html())
 
-  await writeFile(resolve(workspace, TEMP_MARKDOWN), normalizeMarkdown(markdown))
+  await writeFile(resolve(workspace, TEMP_MARKDOWN), await normalizeMarkdown(markdown))
 }
 
-export function normalizeMarkdown(markdown: string) {
-  return markdown
+export async function normalizeMarkdown(markdown: string) {
+  const content = markdown
     .replace(/^[ \t]+(<img[^>]*>)$/gm, '$1') // trim leading spaces for images that are on their own line
-    // eslint-disable-next-line regexp/no-dupe-disjunctions
-    .replace(/^[ \t]+(?![`*\-+>\d\s]|```)/gm, '') // trim leading spaces for text lines (but preserve code blocks, lists, and blockquotes)
+    .replace(/^[ \t]+(?![`*\-+>\d.\s]|```)/gm, '') // trim leading spaces for text lines (but preserve code blocks, lists, and blockquotes)
+    .replace(/^[ \t]+(\d+、)/gm, '$1') // remove leading spaces before Chinese enumeration like "1、"
+    .replace(/^(\s*)(\d+)、\s*/gm, '$1$2. ') // convert Chinese enumeration "1、" to markdown numbered list "1."
+    .replace(/^(>\s*)\\?\*/gm, '$1') // remove asterisk (escaped or not) after blockquote marker
+
+  try {
+    const { default: prettier } = await import('prettier')
+    return await prettier.format(content, { parser: 'markdown' })
+  }
+  catch {
+    return content
+  }
 }

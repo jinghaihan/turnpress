@@ -1,14 +1,13 @@
 import type { CAC } from 'cac'
-import type { CommandOptions, FileType, Options, RangeMode } from './types'
+import type { CommandOptions, FileType, Options, RangeMode, Spinner } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
 import { resolve } from 'pathe'
-import { version } from '../package.json'
 import { cleanTempFiles } from './cleaner'
 import { resolveConfig } from './config'
-import { MODE_CHOICES, TEMP_MARKDOWN } from './constants'
+import { MODE_CHOICES, NAME, TEMP_MARKDOWN, VERSION } from './constants'
 import { convertDocxToHtml, convertHtmlToMarkdown } from './converter'
 import { create } from './create'
 import { markdownMediaExtractor } from './extractor'
@@ -19,16 +18,16 @@ import { copy } from './utils'
 try {
   const cli: CAC = cac('turnpress')
 
-  const prepare: Record<FileType, (options: Options) => Promise<void>> = {
-    docx: async (options: Options) => {
-      p.log.step('Converting DOCX → HTML')
+  const prepare: Record<FileType, (options: Options, spinner: Spinner) => Promise<void>> = {
+    docx: async (options, spinner) => {
+      spinner.message('Converting DOCX → HTML')
       await convertDocxToHtml(options)
 
-      p.log.step('Transforming HTML → Markdown')
+      spinner.message('Transforming HTML → Markdown')
       await convertHtmlToMarkdown(options)
     },
-    md: async (options: Options) => {
-      p.log.step('Copying Markdown → Workspace')
+    md: async (options, spinner) => {
+      spinner.message('Copying Markdown → Workspace')
       await copy(resolve(process.cwd(), options.md), resolve(options.workspace, TEMP_MARKDOWN))
 
       await markdownMediaExtractor(options)
@@ -51,34 +50,38 @@ try {
         options.mode = mode
       }
 
-      p.intro(`${c.yellow`turnpress `}${c.dim`v${version}`}`)
+      p.intro(`${c.yellow`${NAME} `}${c.dim`v${VERSION}`}`)
+
+      const spinner = p.spinner()
+      spinner.start()
 
       const config = await resolveConfig(options)
-      await prepare[config.type](config)
+      await prepare[config.type](config, spinner)
 
-      p.log.step('Splitting Markdown by headings')
+      spinner.message('Splitting Markdown by headings')
       const nested = await splitMarkdown(config)
 
-      p.log.step('Generating VitePress sidebar structure')
+      spinner.message('Generating VitePress sidebar structure')
       await generateSidebar(nested, config)
 
       if (config.clean) {
-        p.log.step('Cleaning temporary files')
+        spinner.message('Cleaning temporary files')
         await cleanTempFiles(config)
       }
 
       if (config.mode === 'convert') {
-        p.outro('Convert completed')
+        spinner.stop(c.green('Convert completed'))
+        p.outro('Done')
         process.exit(0)
       }
       else {
-        p.log.step('Convert completed')
+        spinner.stop(c.green('Convert completed'))
         await create(config)
       }
     })
 
   cli.help()
-  cli.version(version)
+  cli.version(VERSION)
   cli.parse()
 }
 catch (error) {

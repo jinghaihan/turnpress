@@ -14,15 +14,12 @@ TurnPress is a CLI tool that converts both Markdown (.md) and Word (.docx) files
 npx turnpress --docx ./test.docx
 ```
 
-<p align='center'>
-<img src='./assets/screenshot.png' />
-</p>
+<div align="center">
+  <img src="/assets/turnpress.gif" alt="gif" width="45%">
+  <img src="/assets/screenshot.png" alt="png" width="50%">
+</div>
 
 ## Features
-
-<p align='center'>
-<img src='./assets/help.png' />
-</p>
 
 ### Convert
 
@@ -71,6 +68,10 @@ export default defineConfig({
 ```
 
 You can also use command-line options to customize behavior:
+
+<p align='center'>
+<img src='./assets/help.png' />
+</p>
 
 - **`--file, -f <path>`**: Input file path (auto-detects file type)
 - **`--docx <path>`**: Path to the `.docx` file
