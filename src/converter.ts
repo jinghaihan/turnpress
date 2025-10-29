@@ -85,5 +85,13 @@ export async function convertHtmlToMarkdown(options: Options) {
     .use((t: TurndownService) => images(t, (src: string) => src.replace(workspace, '.')))
 
   const markdown = turndownService.turndown($.html())
-  await writeFile(resolve(workspace, TEMP_MARKDOWN), markdown)
+
+  await writeFile(resolve(workspace, TEMP_MARKDOWN), normalizeMarkdown(markdown))
+}
+
+export function normalizeMarkdown(markdown: string) {
+  return markdown
+    .replace(/^[ \t]+(<img[^>]*>)$/gm, '$1') // trim leading spaces for images that are on their own line
+    // eslint-disable-next-line regexp/no-dupe-disjunctions
+    .replace(/^[ \t]+(?![`*\-+>\d\s]|```)/gm, '') // trim leading spaces for text lines (but preserve code blocks, lists, and blockquotes)
 }
